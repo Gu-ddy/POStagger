@@ -3,6 +3,7 @@ import torch
 from torchtext.datasets import UDPOS
 from torchtext.vocab import build_vocab_from_iterator
 from transformers import BertModel,BertTokenizer
+import gdown
 
 TRANSFORMER = "bert-base-uncased"
 tokenizer = BertTokenizer.from_pretrained(TRANSFORMER) # tokenizer for BERT
@@ -37,6 +38,15 @@ crf = NeuralCRF(
     t_cal=T_CAL,
     transformer=bert,
     beta=1)
+
+#download model from google drive
+file_id = '1dy3cX-4xSL00rx0ekq1VvMZw67pRKlQr'
+output = 'pos_model.pt'
+url = f'https://drive.google.com/uc?id={file_id}'
+gdown.download(url, output, quiet=False)
+
+print(f"Downloaded '{output}' from Google Drive")
+
 PATH = "pos_model.pt"
 crf.load_state_dict(torch.load(PATH))
 crf.eval()
